@@ -1,13 +1,13 @@
 ﻿#Requires Autohotkey v2.0
 
-; 左右 Alt キーの空打ちで IME を ON/OFF する AutoHotkey スクリプトのような何か
+; 左右 Alt キーの空打ちで「変換・無変換」を送る君
 ;
-; 左 Alt キーの空打ちで IME OFF
-; 右 Alt キーの空打ちで IME ON
+; 左 Alt キーの空打ちで「無変換」
+; 右 Alt キーの空打ちで「変換」
 ; Alt キーを押している間に他のキーを打つと通常の Alt キーとして動作
-; CapsLock 0.75秒 長押しで ON (OFF は変更なし)
 ;
-; Author:              nekocodeX   https://github.com/nekocodeX/alt-ime-ahk-mod
+; Author: Furamon
+; Original author:     nekocodeX   https://github.com/nekocodeX/alt-ime-ahk-mod
 ; Original author:     karakaram   http://www.karakaram.com/alt-ime-on-off
 
 #Include "IME.ahk"
@@ -38,13 +38,13 @@ AppName(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu)
 
 CheckForUpdates(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu)
 { ; V1toV2: Added bracket
-    Run("https://github.com/nekocodeX/alt-ime-ahk-mod/releases/latest")
+    Run("https://github.com/furamon/alt-ime-ahk-mod-kai/releases/latest")
     Return
 } ; V1toV2: Added Bracket before label
 
 GitHubRepoReadme(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu)
 { ; V1toV2: Added bracket
-    Run("https://github.com/nekocodeX/alt-ime-ahk-mod")
+    Run("https://github.com/furamon/alt-ime-ahk-mod-kai")
     Return
 } ; V1toV2: Added Bracket before hotkey or Hotstring
 
@@ -146,38 +146,23 @@ GitHubRepoReadme(A_ThisMenuItem, A_ThisMenuItemPos, MyMenu)
 } ; V1toV2: Added Bracket before hotkey or Hotstring
 *~LAlt::
 { ; V1toV2: Added bracket
-    SendInput("{Blind}{vkFF}")
+    SendInput("{Blind}{vk1D}") ; 左 Alt 空打ちで「無変換」
 } ; V1toV2: Added Bracket before hotkey or Hotstring
 *~RAlt::
 { ; V1toV2: Added bracket
-    SendInput("{Blind}{vkFF}") ; 左 Alt 空打ちで IME を OFF
+    SendInput("{Blind}{vk1C}") ; 右 Alt 空打ちで「変換」
 } ; V1toV2: Added Bracket before hotkey or Hotstring
 LAlt up::
 { ; V1toV2: Added bracket
     if (A_PriorHotkey == "*~LAlt") {
         IME_SET(0)
     }
-    Return ; 右 Alt 空打ちで IME を ON
+    Return
 } ; V1toV2: Added Bracket before hotkey or Hotstring
 RAlt up::
 { ; V1toV2: Added bracket
     if (A_PriorHotkey == "*~RAlt") {
         IME_SET(1)
     }
-    Return ; CapsLock 0.75秒 長押しで ON (OFF は変更なし)
-} ; V1toV2: Added Bracket before hotkey or Hotstring
-CapsLock::
-{ ; V1toV2: Added bracket
-    ErrorLevel := !KeyWait("CapsLock", "T0.75")
-    If (ErrorLevel && !GetKeyState("CapsLock", "T")) {
-        SetCapsLockState("On")
-    } else if (!ErrorLevel && GetKeyState("CapsLock", "T")) {
-        SetCapsLockState("Off")
-    }
-    ErrorLevel := !KeyWait("CapsLock")
-    Return ; Win + CapsLock を無視
-} ; V1toV2: Added Bracket before hotkey or Hotstring
-#CapsLock::
-{ ; V1toV2: Added bracket
     Return
-} ; V1toV2: Added bracket in the end
+} ; V1toV2: Added Bracket before hotkey or Hotstring
